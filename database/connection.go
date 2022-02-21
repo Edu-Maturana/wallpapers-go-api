@@ -12,7 +12,7 @@ import (
 
 var mongoURI = utils.GetEnv("MONGODB_ATLAS_URI")
 
-func Connect() {
+func Connect() *mongo.Client {
 	client, err := mongo.NewClient(options.Client().ApplyURI(mongoURI))
 	if err != nil {
 		log.Fatal(err)
@@ -24,5 +24,6 @@ func Connect() {
 	} else {
 		log.Println("Connected to database")
 	}
-	defer client.Disconnect(ctx)
+
+	return client
 }
