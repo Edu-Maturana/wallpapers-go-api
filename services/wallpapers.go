@@ -33,3 +33,12 @@ func GetWallpapers() ([]models.Wallpaper, error) {
 
 	return wallpapers, nil
 }
+
+func CreateWallpaper(wallpaper models.Wallpaper) error {
+	_, err := collection.InsertOne(context.TODO(), wallpaper)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
