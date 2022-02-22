@@ -6,6 +6,7 @@ import (
 	"wallpapers/database"
 	"wallpapers/models"
 
+	"github.com/rs/xid"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -35,6 +36,7 @@ func GetWallpapers() ([]models.Wallpaper, error) {
 }
 
 func CreateWallpaper(wallpaper models.Wallpaper) error {
+	wallpaper.ID = xid.New().String()
 	_, err := collection.InsertOne(context.TODO(), wallpaper)
 	if err != nil {
 		return err

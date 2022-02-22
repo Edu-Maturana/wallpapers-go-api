@@ -20,19 +20,20 @@ func GetWallpapers(c echo.Context) error {
 func CreateWallpaper(c echo.Context) error {
 	var wallpaper models.Wallpaper
 
-	error := middlewares.IsAdmin(c)
-	if error != nil {
-		return error
+	adminError := middlewares.IsAdmin(c)
+	if adminError != nil {
+		return adminError
 	}
 
-	if err := c.Bind(&wallpaper); err != nil {
-		return err
-	}
-
-	err := services.CreateWallpaper(wallpaper)
+	err := c.Bind(&wallpaper)
 	if err != nil {
 		return err
 	}
 
-	return c.JSON(200, wallpaper)
+	err = services.CreateWallpaper(wallpaper)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(200, "Wallpaper created successfully!")
 }

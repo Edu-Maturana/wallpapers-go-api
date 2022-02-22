@@ -9,7 +9,7 @@ import (
 var adminEmail = utils.GetEnv("ADMIN_EMAIL")
 
 func IsAdmin(ctx echo.Context) error {
-	email := ctx.FormValue("email")
+	email := ctx.Request().Header.Get("email")
 
 	if email != adminEmail {
 		return echo.ErrForbidden
