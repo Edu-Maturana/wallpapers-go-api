@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"fmt"
+	"time"
 	"wallpapers/database"
 	"wallpapers/models"
 
@@ -37,6 +38,7 @@ func GetWallpapers() ([]models.Wallpaper, error) {
 
 func CreateWallpaper(wallpaper models.Wallpaper) error {
 	wallpaper.ID = xid.New().String()
+	wallpaper.Date = time.Now().Format("2006-01-02 15:04:05")
 	_, err := collection.InsertOne(context.TODO(), wallpaper)
 	if err != nil {
 		return err
