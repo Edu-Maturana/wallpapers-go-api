@@ -5,6 +5,7 @@ import (
 	"wallpapers/models"
 	"wallpapers/services"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 )
 
@@ -25,7 +26,12 @@ func CreateWallpaper(c echo.Context) error {
 		return adminError
 	}
 
-	err := c.Bind(&wallpaper)
+	err := validator.New().Struct(wallpaper)
+	if err != nil {
+		return c.JSON(400, err.Error())
+	}
+
+	err = c.Bind(&wallpaper)
 	if err != nil {
 		return err
 	}
@@ -38,27 +44,6 @@ func CreateWallpaper(c echo.Context) error {
 	return c.JSON(200, "Wallpaper created successfully!")
 }
 
-func UpdateWallpaper(c echo.Context) error {
-	var wallpaper models.Wallpaper
-
-	adminError := middlewares.IsAdmin(c)
-	if adminError != nil {
-		return adminError
-	}
-
-	err := c.Bind(&wallpaper)
-	if err != nil {
-		return err
-	}
-
-	err = services.UpdateWallpaper(wallpaper)
-	if err != nil {
-		return err
-	}
-
-	return c.JSON(200, "Wallpaper updated successfully!")
-}
-
 func DeleteWallpaper(c echo.Context) error {
 	id := c.Param("id")
 
@@ -69,7 +54,7 @@ func DeleteWallpaper(c echo.Context) error {
 
 	err := services.DeleteWallpaper(id)
 	if err != nil {
-		return err
+		return c.JSON(404, "Wallpaper not found")
 	}
 
 	return c.JSON(200, "Wallpaper deleted successfully!")
