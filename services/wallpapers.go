@@ -44,3 +44,21 @@ func CreateWallpaper(wallpaper models.Wallpaper) error {
 
 	return nil
 }
+
+func UpdateWallpaper(wallpaper models.Wallpaper) error {
+	_, err := collection.UpdateOne(context.TODO(), bson.M{"_id": wallpaper.ID}, bson.M{"$set": wallpaper})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DeleteWallpaper(id string) error {
+	_, err := collection.DeleteOne(context.TODO(), bson.M{"_id": id})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

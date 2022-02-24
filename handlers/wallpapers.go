@@ -37,3 +37,40 @@ func CreateWallpaper(c echo.Context) error {
 
 	return c.JSON(200, "Wallpaper created successfully!")
 }
+
+func UpdateWallpaper(c echo.Context) error {
+	var wallpaper models.Wallpaper
+
+	adminError := middlewares.IsAdmin(c)
+	if adminError != nil {
+		return adminError
+	}
+
+	err := c.Bind(&wallpaper)
+	if err != nil {
+		return err
+	}
+
+	err = services.UpdateWallpaper(wallpaper)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(200, "Wallpaper updated successfully!")
+}
+
+func DeleteWallpaper(c echo.Context) error {
+	id := c.Param("id")
+
+	adminError := middlewares.IsAdmin(c)
+	if adminError != nil {
+		return adminError
+	}
+
+	err := services.DeleteWallpaper(id)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(200, "Wallpaper deleted successfully!")
+}
