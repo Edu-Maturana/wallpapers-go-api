@@ -5,6 +5,7 @@ import (
 	"wallpapers/models"
 	"wallpapers/services"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 )
 
@@ -25,7 +26,12 @@ func CreateWallpaper(c echo.Context) error {
 		return adminError
 	}
 
-	err := c.Bind(&wallpaper)
+	err := validator.New().Struct(wallpaper)
+	if err != nil {
+		return c.JSON(400, err.Error())
+	}
+
+	err = c.Bind(&wallpaper)
 	if err != nil {
 		return err
 	}
