@@ -47,19 +47,15 @@ func CreateWallpaper(wallpaper models.Wallpaper) error {
 	return nil
 }
 
-func UpdateWallpaper(wallpaper models.Wallpaper) error {
-	_, err := collection.UpdateOne(context.TODO(), bson.M{"_id": wallpaper.ID}, bson.M{"$set": wallpaper})
+func DeleteWallpaper(id string) error {
+	wallpaper, err := collection.DeleteOne(context.TODO(), bson.M{"_id": id})
+
 	if err != nil {
 		return err
 	}
 
-	return nil
-}
-
-func DeleteWallpaper(id string) error {
-	_, err := collection.DeleteOne(context.TODO(), bson.M{"_id": id})
-	if err != nil {
-		return err
+	if wallpaper.DeletedCount == 0 {
+		return fmt.Errorf("wallpaper not found")
 	}
 
 	return nil

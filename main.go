@@ -20,7 +20,6 @@ func main() {
 	// Routes
 	app.GET("/wallpapers", handlers.GetWallpapers)
 	app.POST("/wallpapers", handlers.CreateWallpaper)
-	app.PUT("/wallpapers/:id", handlers.UpdateWallpaper)
 	app.DELETE("/wallpapers/:id", handlers.DeleteWallpaper)
 
 	// Start server
