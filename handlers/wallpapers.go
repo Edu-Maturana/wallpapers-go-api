@@ -26,12 +26,13 @@ func CreateWallpaper(c echo.Context) error {
 		return adminError
 	}
 
-	err := validator.New().Struct(wallpaper)
+	err := c.Bind(&wallpaper)
 	if err != nil {
-		return c.JSON(400, err.Error())
+		return err
 	}
 
-	err = c.Bind(&wallpaper)
+	validate := validator.New()
+	err = validate.Struct(wallpaper)
 	if err != nil {
 		return err
 	}
